@@ -12,7 +12,9 @@ phina.define('MainScene', {
     this.superInit({width:SC_W, height: SC_H});
 
     //マップ表示用ベース
-    this.mapBase = phina.display.DisplayElement().setPosition(0, 0).addChildTo(this);
+    this.mapOffsetX = -16;
+    this.mapOffsetY = -16;
+    this.mapBase = phina.display.DisplayElement().setPosition(this.mapOffsetX, this.mapOffsetY).addChildTo(this);
 
     //.tmxファイルからマップをイメージとして取得し、スプライトで表示
     this.tmx = phina.asset.AssetManager.get("tmx", "map");
@@ -68,7 +70,7 @@ phina.define('MainScene', {
         if (this.player.y > 0 && !this.mapCollision(this.player.x, this.player.y-32)) {
           this.moving = true;
           this.player.tweener.clear().by({y: -32}, spd);
-          if (0 < my && this.player.y < this.map.height - SC_H/2+32) this.map.tweener.clear().by({y: 32}, spd);
+          if (0 < my && this.player.y < this.map.height-SC_H/2+32) this.map.tweener.clear().by({y: 32}, spd);
         }
       }
       if (kb.getKey("down")) {
@@ -76,7 +78,7 @@ phina.define('MainScene', {
         if (this.player.y < this.map.height-32 && !this.mapCollision(this.player.x, this.player.y+32)) {
           this.moving = true;
           this.player.tweener.clear().by({y: 32}, spd);
-          if (my < this.map.height && this.player.y > 128 && this.player.y < this.map.height-SC_H/2)this.map.tweener.clear().by({y: -32}, spd);
+          if (my < this.map.height && this.player.y > 128 && this.player.y < this.map.height-SC_H/2+this.mapOffsetX*2) this.map.tweener.clear().by({y: -32}, spd);
         }
       }
       if (kb.getKey("left")) {
@@ -84,7 +86,7 @@ phina.define('MainScene', {
         if (this.player.x > 0 && !this.mapCollision(this.player.x-32, this.player.y)) {
           this.moving = true;
           this.player.tweener.clear().by({x: -32}, spd);
-          if (0 < mx && this.player.x < this.map.width - SC_W/2+32) this.map.tweener.clear().by({x: 32}, spd);
+          if (0 < mx && this.player.x < this.map.width-SC_W/2+32) this.map.tweener.clear().by({x: 32}, spd);
         }
       }
       if (kb.getKey("right")) {
@@ -92,7 +94,7 @@ phina.define('MainScene', {
         if (this.player.x < this.map.width-32 && !this.mapCollision(this.player.x+32, this.player.y)) {
           this.moving = true;
           this.player.tweener.clear().by({x: 32}, spd);
-          if (mx < this.map.width && this.player.x > 128 && this.player.x < this.map.width-SC_W/2) this.map.tweener.clear().by({x: -32}, spd);
+         if (mx < this.map.width && this.player.x > 128 && this.player.x < this.map.width-SC_W/2+this.mapOffsetY*2) this.map.tweener.clear().by({x: -32}, spd);
         }
       }
       if (kb.getKey("z")) {
