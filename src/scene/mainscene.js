@@ -28,6 +28,9 @@ phina.define('MainScene', {
     this.npc = this.tmx.getObjectGroup("NPCGroup");
     this.addNPC();
 
+    //マップデータから'Collision'レイヤーを取得
+    this.collision = this.tmx.getMapData("collision");
+
     //プレイヤー用キャラクタ
     this.player = Character(0).setPosition(160, 160).addChildTo(this.map);
 
@@ -141,18 +144,15 @@ phina.define('MainScene', {
     var mapx = Math.floor(x / 32);
     var mapy = Math.floor(y / 32);
 
-    //マップデータから'Collision'レイヤーを取得
-    var collision = this.tmx.getMapData("collision");
-
     //指定座標にマップチップがあると真を返す
-    var chip = collision[mapy * this.tmx.width + mapx];
+    var chip = this.collision[mapy * this.tmx.width + mapx];
     if (chip !== -1) return true;
 
     //マップ上キャラクタとの衝突判定
     var children = this.map.children;
     for (var i = 0; i < children.length; i++) {
       var chr = children[i];
-      if (chr.type != 0 && x == chr.x && y == chr.y) return true;
+      if (x == chr.x && y == chr.y) return true;
     }
 
     return false;
@@ -163,7 +163,7 @@ phina.define('MainScene', {
     var children = this.map.children;
     for (var i = 0; i < children.length; i++) {
       var chr = children[i];
-      if (chr.type != 0 && x == chr.x && y == chr.y) return chr;
+      if (x == chr.x && y == chr.y) return chr;
     }
   },
 
